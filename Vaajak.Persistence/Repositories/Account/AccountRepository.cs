@@ -1,20 +1,30 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Vaajak.Application.Dto.Primitives;
 using Vaajak.Domain.Entities;
 using Vaajak.Domain.Repositories.Account;
+using Vaajak.Persistence.Contexts;
 
 namespace Vaajak.Persistence.Repositories.Account
 {
     public class AccountRepository: IAccountRepository
     {
+        private readonly DatabaseContext _context;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public AccountRepository(UserManager<User> userManager, SignInManager<User> signInManager, IJwtTokenGenerator jwtTokenGenerator)
+        public AccountRepository(DatabaseContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IJwtTokenGenerator jwtTokenGenerator)
         {
+            _context = dbContext;
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtTokenGenerator = jwtTokenGenerator;
+        }
+
+        public async Task<IEnumerable<User?>> GetAllUsersAsync(PaginationRequestDTO paginationRequestDTO)
+        {
+            return await _userManager.Users.ToListAsync();
         }
 
         public async Task<User?> SignupAsync(User user, string password)
@@ -32,7 +42,7 @@ namespace Vaajak.Persistence.Repositories.Account
         public async Task<User?> SigninAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, password))
+            if (user == null || !await _signInManager.CheckPasswordAsync(user, password, isPersistent: false, lockoutOnFailure: false))
             {
                 return null;
             }
@@ -45,6 +55,16 @@ namespace Vaajak.Persistence.Repositories.Account
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<User> FindByUsernameAsync(string username)
+        {
+            return await _userManager.FindByNameAsync(username);
+        }
+
+        public async Task<User> FindByIdAsync(string userId)
+        {
+            return await _userManager.FindByEmailAsync(userId);
+        }
+
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
             return await _userManager.CheckPasswordAsync(user, password);
@@ -53,5 +73,6 @@ namespace Vaajak.Persistence.Repositories.Account
         {
             return await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
         }
+
     }
 }

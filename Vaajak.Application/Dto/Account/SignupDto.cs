@@ -6,7 +6,7 @@ namespace Vaajak.Application.Dto.Account
     public class SignupDto
     {
         [Required]
-        public string Username { get; set; }
+        public string UserName { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]

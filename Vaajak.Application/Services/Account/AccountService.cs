@@ -16,31 +16,31 @@ namespace Vaajak.Application.Services.Account
             _accountRepository = accountRepository;
         }
 
-        //public async Task<IPagedList<AccountDto>> GetAllAsync(PaginationRequestDTO paginationRequestDTO)
-        //{
-        //    try
-        //    {
-        //        var accounts = await _accountRepository.GetAllAsync(paginationRequestDTO);
-        //        var accountDto = accounts.Select(account => new AccountDto
-        //        {
-        //            Id = account.Id,
-        //            Username = account.Username,
-        //            Email = account.Email,
-        //            FirstName = account.FirstName,
-        //            LastName = account.LastName,
-        //        });
+        public async Task<IPagedList<AccountDto>> GetAllUsersAsync(PaginationRequestDTO paginationRequestDTO)
+        {
+            try
+            {
+                var accounts = await _accountRepository.GetAllUsersAsync();
+                var accountDto = accounts.Select(account => new AccountDto
+                {
+                    Id = account.Id,
+                    Username = account.UserName,
+                    Email = account.Email,
+                    FirstName = account.FirstName,
+                    LastName = account.LastName,
+                });
 
-        //        var paginatedAccounts = accountDto.ToPagedList(paginationRequestDTO.PageNumber, paginationRequestDTO.PageSize);
-        //        return paginatedAccounts;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
+                var paginatedAccounts = accountDto.ToPagedList(paginationRequestDTO.PageNumber, paginationRequestDTO.PageSize);
+                return paginatedAccounts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
 
-        //    }
+            }
 
 
-        //}
+        }
 
         public async Task<SignupDto> SignupAsync(SignupDto signupDto)
         {
@@ -48,15 +48,14 @@ namespace Vaajak.Application.Services.Account
             {
                 var account = new User
                 {
-                    UserName = signupDto.Username,
+                    UserName = signupDto.UserName,
                     Email = signupDto.Email,
                     FirstName = signupDto.FirstName,
                     LastName = signupDto.LastName,
                     PasswordHash = signupDto.Password,
                 };
 
-                var result = await _accountRepository.SignupAsync(account, signupDto.Password);
-
+                return await _accountRepository.SignupAsync(account, signupDto.Password);
 
             }
             catch (Exception ex)
