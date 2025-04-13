@@ -36,7 +36,10 @@ namespace VaajakApi.Controllers
         }
 
         [HttpGet, Route("getAll")]
-        public async Task<IActionResult> 
+        public async Task<IActionResult> GetAllUser()
+        {
+            var users = await _userManager.
+        }
 
     }
 }
