@@ -42,6 +42,11 @@ namespace Vaajak.Application.Services.Account
 
         }
 
+        public Task<SigninDto> SigninAsync(SigninDto signinDto)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<SignupDto> SignupAsync(SignupDto signupDto)
         {
             try
@@ -52,11 +57,19 @@ namespace Vaajak.Application.Services.Account
                     Email = signupDto.Email,
                     FirstName = signupDto.FirstName,
                     LastName = signupDto.LastName,
-                    PasswordHash = signupDto.Password,
+                    // Do not set PasswordHash directly
                 };
 
-                return await _accountRepository.SignupAsync(account, signupDto.Password);
+                var createdUser = await _accountRepository.SignupAsync(account, signupDto.Password);
 
+                return new SignupDto
+                {
+                    UserName = createdUser.UserName,
+                    Email = createdUser.Email,
+                    FirstName = createdUser.FirstName,
+                    LastName = createdUser.LastName,
+                    // Exclude password from return for security
+                };
             }
             catch (Exception ex)
             {

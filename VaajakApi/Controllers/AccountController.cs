@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Vaajak.Application.Dto.Account;
+using Vaajak.Application.Dto.Primitives;
 using Vaajak.Application.Services.Account;
 using Vaajak.Domain.Entities;
 
@@ -36,9 +37,17 @@ namespace VaajakApi.Controllers
         }
 
         [HttpGet, Route("getAll")]
-        public async Task<IActionResult> GetAllUser()
+        public async Task<IActionResult> GetAllUsers([FromQuery] PaginationRequestDTO paginationRequestDTO)
         {
-            var users = await _userManager.
+            try
+            {
+                var users = await _accountService.GetAllUsersAsync(paginationRequestDTO);
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while fetching users.", error = ex.Message });
+            }
         }
 
     }
