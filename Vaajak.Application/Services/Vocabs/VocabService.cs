@@ -18,7 +18,7 @@ namespace Vaajak.Application.Services.Vocabs
         
         public async Task<IPagedList<VocabsDto>> GetAllAsync(Guid packageId, PaginationRequestDTO pagination)
         {
-            var vocabs = await _vocabsRepository.GetAllAsync(packageId);
+            var vocabs = await _vocabsRepository.GetAllAsync();
             var vocabsDto = vocabs.Select(vocab => new VocabsDto
             {
                 Id = vocab.Id,
@@ -65,11 +65,11 @@ namespace Vaajak.Application.Services.Vocabs
             return vocabDto;
         }
 
-        public async Task<UpdateVocabDto?> UpdateVocab(Guid id,UpdateVocabDto updateVocabDto)
+        public async Task<UpdateVocabDto?> UpdateVocab(UpdateVocabDto updateVocabDto)
         {
             var vocab = new Vocab
             {
-                Id = id,
+                Id = updateVocabDto.Id,
                 Vocabulary = updateVocabDto.Vocabulary,
                 Type = updateVocabDto.Type,
                 Voice = updateVocabDto.Voice
@@ -88,7 +88,7 @@ namespace Vaajak.Application.Services.Vocabs
             };
         }
 
-        public async Task<bool> DeleteVocab(Guid id)
+        public async Task<bool> DeleteById(Guid id)
         {
             bool isDeleted = await _vocabsRepository.DeleteVocab(id);
             return isDeleted;

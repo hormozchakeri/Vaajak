@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Vaajak.Application.Dto.Primitives;
 using Vaajak.Application.Dto.Vocabs;
 using Vaajak.Domain.Entities;
@@ -18,7 +17,7 @@ namespace Vaajak.Infrastructure.Repositories.Vocabs
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Vocab>> GetAllAsync(Guid packageId)
+        public async Task<IEnumerable<Vocab>> GetAllAsync()
         {
             // Ensure the query is correctly constructed
             return await _dbContext.Vocabs
