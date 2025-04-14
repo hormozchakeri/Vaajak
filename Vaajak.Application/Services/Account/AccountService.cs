@@ -20,7 +20,7 @@ namespace Vaajak.Application.Services.Account
         {
             try
             {
-                var accounts = await _accountRepository.GetAllUsersAsync();
+                var accounts = await _accountRepository.GetAllAsync();
                 var accountDto = accounts.Select(account => new AccountDto
                 {
                     Id = account.Id,

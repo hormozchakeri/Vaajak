@@ -4,7 +4,7 @@ namespace Vaajak.Domain.Repositories.Account
 {
     public interface IAccountRepository
     {
-        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<IEnumerable<User>> GetAllAsync();
         Task<User> SignupAsync(User user, string password);
         Task<User> SigninAsync(string username, string password);
         Task<User> FindByEmailAsync(string email);

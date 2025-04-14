@@ -15,8 +15,4 @@
     <ProjectReference Include="..\Vaajak.Domain\Vaajak.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>

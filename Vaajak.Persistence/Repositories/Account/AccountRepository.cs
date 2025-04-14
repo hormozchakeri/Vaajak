@@ -22,7 +22,7 @@ namespace Vaajak.Persistence.Repositories.Account
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<IEnumerable<User?>> GetAllUsersAsync(PaginationRequestDTO paginationRequestDTO)
+        public async Task<IEnumerable<User?>> GetAllAsync()
         {
             return await _userManager.Users.ToListAsync();
         }
