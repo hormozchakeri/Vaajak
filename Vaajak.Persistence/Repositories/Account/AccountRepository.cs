@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Vaajak.Application.Dto.Primitives;
+using Vaajak.Domain.Common.Auth;
 using Vaajak.Domain.Entities;
 using Vaajak.Domain.Repositories.Account;
 using Vaajak.Persistence.Contexts;

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Vaajak.Domain.Common.Auth;
 using Vaajak.Domain.Repositories.Packages;
 using Vaajak.Domain.Repositories.Vocabs;
 using Vaajak.Infrastructure.Repositories.Packages;
@@ -19,6 +20,7 @@ namespace Vaajak.Infrastructure.Extentions
 
             services.AddScoped<IVocabsRepository, VocabRepository>();
             services.AddScoped<IPackagesRepository, PackageRepository>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         }
     }
 }
