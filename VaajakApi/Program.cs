@@ -7,6 +7,9 @@ using Vaajak.Infrastructure.Extentions;
 using Microsoft.AspNetCore.Identity;
 using Vaajak.Domain.Entities;
 using Vaajak.Domain.Common.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 

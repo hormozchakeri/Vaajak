@@ -7,6 +7,7 @@ using Vaajak.Domain.Repositories.Packages;
 using Vaajak.Domain.Repositories.Vocabs;
 using Vaajak.Infrastructure.Repositories.Packages;
 using Vaajak.Infrastructure.Repositories.Vocabs;
+using Vaajak.Application.Services.Auth;
 using Vaajak.Persistence.Contexts;
 
 namespace Vaajak.Infrastructure.Extentions

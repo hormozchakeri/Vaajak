@@ -8,7 +8,7 @@ using Vaajak.Domain.Entities;
 
 namespace Vaajak.Application.Services.Auth
 {
-    internal class JwtTokenGenerator : IJwtTokenGenerator
+    public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private readonly IConfiguration _configuration;
         public JwtTokenGenerator(IConfiguration configuration)
