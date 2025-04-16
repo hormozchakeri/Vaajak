@@ -7,7 +7,7 @@ using Vaajak.Persistence.Contexts;
 using X.PagedList;
 using X.PagedList.Extensions;
 
-namespace Vaajak.Infrastructure.Repositories.Vocabs
+namespace Vaajak.Persistence.Repositories.Vocabs
 {
     public class VocabRepository : IVocabsRepository
     {

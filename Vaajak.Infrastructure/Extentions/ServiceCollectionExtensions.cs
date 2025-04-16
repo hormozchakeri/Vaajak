@@ -5,8 +5,8 @@ using Microsoft.Extensions.Options;
 using Vaajak.Domain.Common.Auth;
 using Vaajak.Domain.Repositories.Packages;
 using Vaajak.Domain.Repositories.Vocabs;
-using Vaajak.Infrastructure.Repositories.Packages;
-using Vaajak.Infrastructure.Repositories.Vocabs;
+using Vaajak.Persistence.Repositories.Packages;
+using Vaajak.Persistence.Repositories.Vocabs;
 using Vaajak.Application.Services.Auth;
 using Vaajak.Persistence.Contexts;
 
