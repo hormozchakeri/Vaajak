@@ -11,14 +11,14 @@ namespace Vaajak.Persistence.Repositories.Account
     {
         private readonly DatabaseContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        //private readonly SignInManager<User> _signInManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public AccountRepository(DatabaseContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IJwtTokenGenerator jwtTokenGenerator)
+        public AccountRepository(DatabaseContext dbContext, UserManager<User> userManager, IJwtTokenGenerator jwtTokenGenerator)
         {
             _context = dbContext;
             _userManager = userManager;
-            _signInManager = signInManager;
+            //_signInManager = signInManager;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
@@ -42,12 +42,13 @@ namespace Vaajak.Persistence.Repositories.Account
         public async Task<User?> SigninAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null || !await _signInManager.CheckPasswordAsync(user, password, isPersistent: false, lockoutOnFailure: false))
+            //if (user == null || !await _userManager.CheckPasswordAsync(user, password, isPersistent: false, lockoutOnFailure: false))
+            if (user == null)
             {
                 return null;
             }
-
-            return user;
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+            return isPasswordValid ? user : null;
         }
 
         public async Task<User> FindByEmailAsync(string email)

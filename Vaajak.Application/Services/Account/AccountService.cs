@@ -42,9 +42,21 @@ namespace Vaajak.Application.Services.Account
 
         }
 
-        public Task<SigninDto> SigninAsync(SigninDto signinDto)
+        public async Task<SigninResponseDto> SigninAsync(SigninDto signinDto)
         {
-            throw new NotImplementedException();
+            var user = await _accountRepository.SigninAsync(signinDto.Username, signinDto.Password);
+            if (user == null)
+            {
+                throw new Exception("کاربری با این مشخصات یافت نشد");
+            }
+            var token = await _accountRepository.GenerateJwtTokenAsync(user);
+
+            return new SigninResponseDto
+            {
+                Token = token,
+                Username = user.UserName,
+                Email = user.Email
+            };
         }
 
         public async Task<SignupDto> SignupAsync(SignupDto signupDto)

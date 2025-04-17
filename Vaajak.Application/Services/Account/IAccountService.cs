@@ -8,6 +8,6 @@ namespace Vaajak.Application.Services.Account
     {
         Task<IPagedList<AccountDto>> GetAllUsersAsync(PaginationRequestDTO paginationRequestDTO);
         Task<SignupDto> SignupAsync(SignupDto signupDto);
-        Task<SigninDto> SigninAsync(SigninDto signinDto);
+        Task<SigninResponseDto> SigninAsync(SigninDto signinDto);
     }
 }

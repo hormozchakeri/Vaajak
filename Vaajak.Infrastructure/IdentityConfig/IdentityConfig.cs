@@ -29,7 +29,7 @@ namespace Vaajak.Infrastructure.IdentityConfig
                 options.Password.RequiredUniqueChars = 0;
             })
                 .AddEntityFrameworkStores<IdentityDatabaseContext>()
-                .AddRoles<IdentityRole>()
+                .AddRoles<Role>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<PersianIdentityErrorDescriber>();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Vaajak.Application.Dto.Account;
@@ -31,9 +32,15 @@ namespace VaajakApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.FindByNameAsync(signinDto.Username);
-            if (user == null) return NotFound();
-            return Ok(user);
+            try
+            {
+                var result = await _accountService.SigninAsync(signinDto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
         }
 
         [HttpGet, Route("getAll")]
@@ -49,6 +56,20 @@ namespace VaajakApi.Controllers
                 return StatusCode(500, new { message = "An error occurred while fetching users.", error = ex.Message });
             }
         }
+
+        //[Authorize(Roles = "Admin")]
+        //[HttpGet("admin-data")]
+        //public IActionResult GetAdminData()
+        //{
+        //    return Ok("You are an admin!");
+        //}
+
+        //[Authorize(Policy = "AdminOnly")]
+        //[HttpGet("admin-data")]
+        //public IActionResult GetAdminDatas()
+        //{
+        //    return Ok("You are an admin!");
+        //}
 
     }
 }
