@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Vaajak.Infrastructure.IdentityConfig;
 using Vaajak.Persistence.Contexts;
 using Vaajak.Application.Extensions;
@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Vaajak.Persistence.Seeders;
+using Share;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,8 @@ using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    Console.WriteLine($"Using connection string: {ConnectionStrings.IdentityDatabaseContext}");
+
     await IdentitySeeder.SeedRolesAsync(roleManager);
     await IdentitySeeder.SeedAdminUserAsync(userManager);
 }

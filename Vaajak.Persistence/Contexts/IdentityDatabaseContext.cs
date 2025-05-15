@@ -10,7 +10,6 @@ namespace Vaajak.Persistence.Contexts
 
         public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options) : base(options)
         {
-
         }
     }
 }

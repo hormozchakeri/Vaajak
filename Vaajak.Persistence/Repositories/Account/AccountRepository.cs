@@ -7,7 +7,7 @@ using Vaajak.Persistence.Contexts;
 
 namespace Vaajak.Persistence.Repositories.Account
 {
-    public class AccountRepository: IAccountRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly DatabaseContext _context;
         private readonly UserManager<User> _userManager;

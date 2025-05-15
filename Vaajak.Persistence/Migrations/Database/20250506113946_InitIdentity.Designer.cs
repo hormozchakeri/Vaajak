@@ -9,11 +9,11 @@ using Vaajak.Persistence.Contexts;
 
 #nullable disable
 
-namespace Vaajak.Persistence.Migrations
+namespace Vaajak.Persistence.Migrations.Database
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240513153721_init")]
-    partial class init
+    [Migration("20250506113946_InitIdentity")]
+    partial class InitIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

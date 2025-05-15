@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Share;
 using Vaajak.Domain.Entities;
 
 namespace Vaajak.Persistence.Seeders
@@ -11,8 +12,18 @@ namespace Vaajak.Persistence.Seeders
 
             foreach (var role in roles)
             {
-                if (!await roleManager.RoleExistsAsync(role))
-                    await roleManager.CreateAsync(new Role { Name = role });
+                try
+                {
+                    Console.WriteLine($"Using connection string: {ConnectionStrings.IdentityDatabaseContext}");
+
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new Role { Name = role });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Seeding failed: {ex.Message}");
+                    throw;
+                }
             }
         }
 

@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Share\Share.csproj" />
     <ProjectReference Include="..\Vaajak.Application\Vaajak.Application.csproj" />
     <ProjectReference Include="..\Vaajak.Domain\Vaajak.Domain.csproj" />
     <ProjectReference Include="..\Vaajak.Persistence\Vaajak.Persistence.csproj" />
