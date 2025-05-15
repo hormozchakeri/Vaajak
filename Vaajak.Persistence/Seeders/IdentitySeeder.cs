@@ -44,7 +44,7 @@ namespace Vaajak.Persistence.Seeders
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(newAdmin, "admin");
+                    await userManager.AddToRoleAsync(newAdmin, "Admin");
                 }
             }
         }

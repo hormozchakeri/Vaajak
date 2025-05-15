@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Vaajak.Persistence.Migrations
+namespace Vaajak.Persistence.Migrations.IdentityDatabase
 {
     /// <inheritdoc />
-    public partial class InitIdentity : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -8,7 +8,7 @@ using Vaajak.Persistence.Contexts;
 
 #nullable disable
 
-namespace Vaajak.Persistence.Migrations.Database
+namespace Vaajak.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot

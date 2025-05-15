@@ -28,9 +28,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddIdentity<User, Role>()
-    .AddEntityFrameworkStores<IdentityDatabaseContext>()
-    .AddDefaultTokenProviders();
+//builder.Services.AddIdentity<User, Role>()
+//    .AddEntityFrameworkStores<IdentityDatabaseContext>()
+//    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
 {
