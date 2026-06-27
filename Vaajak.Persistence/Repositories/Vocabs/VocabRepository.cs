@@ -30,27 +30,13 @@ namespace Vaajak.Persistence.Repositories.Vocabs
         {
             try
             {
-
-            var vocab = await _dbContext.Vocabs.FirstOrDefaultAsync(x => x.Id == id);
-            if (vocab == null)
-            {
-                    return null;
-            }
-                var vocabDto = new Vocab
-                {
-                    Id = vocab.Id,
-                    Vocabulary = vocab.Vocabulary,
-                    Type = vocab.Type,
-                    Voice = vocab.Voice,
-                };
-
-            return vocabDto;
+                return await _dbContext.Vocabs
+                    .Include(v => v.Translations)
+                    .FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex)
             {
-                // Log the exception (using a logging framework of your choice)
                 Console.WriteLine($"Error fetching vocab by id: {ex.Message}");
-                // Handle or rethrow the exception as needed
                 throw;
             }
         }
@@ -119,9 +105,18 @@ namespace Vaajak.Persistence.Repositories.Vocabs
                     throw null;
                 }
 
-                existingVocab.Vocabulary = vocab.Vocabulary;
-                existingVocab.Type = vocab.Type;
-                existingVocab.Voice = vocab.Voice;
+                existingVocab.Vocabulary       = vocab.Vocabulary;
+                existingVocab.Type             = vocab.Type;
+                existingVocab.Voice            = vocab.Voice;
+                existingVocab.IpaPronunciation = vocab.IpaPronunciation;
+                existingVocab.Meaning   = vocab.Meaning;
+                existingVocab.Example1         = vocab.Example1;
+                existingVocab.Example2         = vocab.Example2;
+                existingVocab.Example3         = vocab.Example3;
+                existingVocab.Synonyms         = vocab.Synonyms;
+                existingVocab.Antonyms         = vocab.Antonyms;
+                existingVocab.WordFamily       = vocab.WordFamily;
+                existingVocab.ImageFile        = vocab.ImageFile;
 
                 if (vocab.Package != null)
                 {
@@ -179,7 +174,32 @@ namespace Vaajak.Persistence.Repositories.Vocabs
             catch (Exception ex) {
                 throw new Exception(ex.Message);
             }
+        }
 
+        public async Task<(int imported, int skipped)> BulkCreateAsync(IEnumerable<Vocab> vocabs, Guid packageId)
+        {
+            var package = await _dbContext.Packages.FindAsync(packageId)
+                ?? throw new Exception("Package not found");
+
+            int imported = 0, skipped = 0;
+
+            foreach (var vocab in vocabs)
+            {
+                // Skip duplicates (same word in same package)
+                bool exists = await _dbContext.Vocabs
+                    .AnyAsync(v => v.Vocabulary == vocab.Vocabulary
+                               && v.Package.Any(p => p.Id == packageId));
+
+                if (exists) { skipped++; continue; }
+
+                vocab.Id = Guid.NewGuid();
+                vocab.Package.Add(package);
+                _dbContext.Vocabs.Add(vocab);
+                imported++;
+            }
+
+            await _dbContext.SaveChangesAsync();
+            return (imported, skipped);
         }
     }
 }

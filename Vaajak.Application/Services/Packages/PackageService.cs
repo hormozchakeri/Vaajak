@@ -1,13 +1,12 @@
-﻿using Vaajak.Application.Dto.Packages;
+using Microsoft.EntityFrameworkCore;
+using Vaajak.Application.Dto.Packages;
 using Vaajak.Application.Dto.Primitives;
 using Vaajak.Domain.Entities;
 using Vaajak.Domain.Repositories.Packages;
-using X.PagedList;
-using X.PagedList.Extensions;
 
 namespace Vaajak.Application.Services.Packages
 {
-    public class PackageService: IPackageService
+    public class PackageService : IPackageService
     {
         private readonly IPackagesRepository _packagesRepository;
 
@@ -16,65 +15,109 @@ namespace Vaajak.Application.Services.Packages
             _packagesRepository = packagesRepository;
         }
 
-        public async Task<IPagedList<PackageDto>> GetAllAsync(PaginationRequestDTO pagination)
+        public async Task<PaginatedResponse<PackageDto>> GetAllAsync(PaginationRequestDTO pagination)
         {
-            try
-            {
-                var packages = await _packagesRepository.GetAllAsync();
-                var packageDto = packages.Select(Package => new PackageDto
+            var pageNumber = pagination.PageNumber < 1 ? 1 : pagination.PageNumber;
+            var pageSize = pagination.PageSize <= 0 ? 10 : pagination.PageSize;
+            pageSize = pageSize > 50 ? 50 : pageSize;
+
+            var query = _packagesRepository.GetAll();
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(p => p.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new PackageDto
                 {
-                    Id = Package.Id,
-                    PackageName = Package.PackageName
-                });
+                    Id          = p.Id,
+                    PackageName = p.PackageName,
+                    Description = p.Description,
+                    Price       = p.Price,
+                    Producer    = p.Producer,
+                    Rate        = p.Rate,
+                    RateCount   = p.RateCount,
+                })
+                .ToListAsync();
 
-                var paginatedPackages = packageDto.ToPagedList(pagination.PageNumber, pagination.PageSize);
-
-                return paginatedPackages;
-
-            }
-            catch (Exception ex)
+            return new PaginatedResponse<PackageDto>
             {
-                throw new Exception(ex.Message);
-            }
+                Items      = items,
+                PageNumber = pageNumber,
+                PageSize   = pageSize,
+                TotalCount = totalCount
+            };
         }
+
         public async Task<PackageDto?> GetPackageById(Guid id)
         {
-            try
+            var p = await _packagesRepository.GetPackageById(id);
+
+            if (p == null) return null;
+
+            return new PackageDto
             {
-                var package = await _packagesRepository.GetPackageById(id);
-
-                if(package == null) return null;
-
-
-                return new PackageDto
-                {
-                    Id = package.Id,
-                    PackageName = package.PackageName,
-                };
-
-            }catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+                Id          = p.Id,
+                PackageName = p.PackageName,
+                Description = p.Description,
+                Price       = p.Price,
+                Producer    = p.Producer,
+                Rate        = p.Rate,
+                RateCount   = p.RateCount,
+            };
         }
 
-        public async Task<CreatePackageDto> CreatePackage(CreatePackageDto createPackageDto)
+        public async Task<PackageDto> CreatePackage(CreatePackageDto createPackageDto, string ownerId)
         {
             var package = new Package
             {
-                Id = Guid.NewGuid(),
+                Id          = createPackageDto.Id != Guid.Empty ? createPackageDto.Id : Guid.NewGuid(),
                 PackageName = createPackageDto.PackageName,
+                Description = createPackageDto.Description,
+                Price       = createPackageDto.Price,
+                Producer    = createPackageDto.Producer,
+                Rate        = createPackageDto.Rate,
+                RateCount   = createPackageDto.RateCount,
+                OwnerId     = ownerId,
             };
 
-            var createdPackage = await _packagesRepository.CreatePackage(package);
+            var created = await _packagesRepository.CreatePackage(package);
 
-            var mappedPackage = new CreatePackageDto
+            return new PackageDto
             {
-                Id = createdPackage.Id,
-                PackageName = createdPackage.PackageName,
+                Id          = created.Id,
+                PackageName = created.PackageName,
+                Description = created.Description,
+                Price       = created.Price,
+                Producer    = created.Producer,
+                Rate        = created.Rate,
+                RateCount   = created.RateCount,
+                OwnerId     = created.OwnerId,
+                IsOwner     = true,
             };
+        }
 
-            return mappedPackage;
+        public async Task<List<PackageDto>> GetMyPackagesAsync(string ownerId)
+        {
+            var packages = await _packagesRepository.GetAll()
+                .Where(p => p.OwnerId == ownerId)
+                .OrderByDescending(p => p.Id)
+                .Select(p => new PackageDto
+                {
+                    Id          = p.Id,
+                    PackageName = p.PackageName,
+                    Description = p.Description,
+                    Price       = p.Price,
+                    Producer    = p.Producer,
+                    Rate        = p.Rate,
+                    RateCount   = p.RateCount,
+                    OwnerId     = p.OwnerId,
+                    IsOwner     = true,
+                })
+                .ToListAsync();
+
+            return packages;
         }
     }
 }

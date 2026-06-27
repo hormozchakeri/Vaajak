@@ -35,16 +35,16 @@ namespace Vaajak.Persistence.Seeders
             {
                 var newAdmin = new User
                 {
-                    UserName = "vaajak_admin",
+                    UserName = "latoos_admin",
                     Email = adminEmail,
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(newAdmin, "050425Hc");
+                var result = await userManager.CreateAsync(newAdmin, "C0!3coa(7CR1");
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(newAdmin, "Admin");
+                    IdentityResult addToAdminRoleResult = await userManager.AddToRoleAsync(newAdmin, "Admin");
                 }
             }
         }

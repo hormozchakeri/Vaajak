@@ -20,7 +20,9 @@ namespace Vaajak.Persistence.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConnectionStrings.IdentityDatabaseContext);
+            //optionsBuilder.UseSqlServer(ConnectionStrings.IdentityDatabaseContext);
+            optionsBuilder.UseNpgsql(ConnectionStrings.IdentityDatabaseContext);
+
             base.OnConfiguring(optionsBuilder);
         }
     }

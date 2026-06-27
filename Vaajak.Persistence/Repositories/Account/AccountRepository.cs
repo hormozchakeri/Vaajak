@@ -39,9 +39,9 @@ namespace Vaajak.Persistence.Repositories.Account
             throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        public async Task<User?> SigninAsync(string email, string password)
+        public async Task<User?> SigninAsync(string username, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByNameAsync(username);
             //if (user == null || !await _userManager.CheckPasswordAsync(user, password, isPersistent: false, lockoutOnFailure: false))
             if (user == null)
             {
@@ -63,7 +63,7 @@ namespace Vaajak.Persistence.Repositories.Account
 
         public async Task<User> FindByIdAsync(string userId)
         {
-            return await _userManager.FindByEmailAsync(userId);
+            return await _userManager.FindByIdAsync(userId);
         }
 
         public async Task<bool> CheckPasswordAsync(User user, string password)

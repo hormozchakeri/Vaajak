@@ -4,8 +4,9 @@ namespace Vaajak.Domain.Repositories.Packages
 {
     public interface IPackagesRepository
     {
-        Task<IEnumerable<Package>> GetAllAsync();
-        Task<Package> GetPackageById(Guid id);
+        IQueryable<Package> GetAll();
+        Task<Package?> GetPackageById(Guid id);
         Task<Package> CreatePackage(Package package);
+        Task<List<Package>> GetByOwnerIdAsync(string ownerId);
     }
 }

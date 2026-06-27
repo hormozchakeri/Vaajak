@@ -12,5 +12,6 @@ namespace Vaajak.Application.Services.Vocabs
         Task<CreateVocabDto> CreateVocab(CreateVocabDto createVocabDto);
         Task<UpdateVocabDto> UpdateVocab(UpdateVocabDto updateVocabDto);
         Task<bool> DeleteById(Guid id);
+        Task<BulkImportVocabResultDto> BulkImportAsync(BulkImportVocabRequestDto request);
     }
 }

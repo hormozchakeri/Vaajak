@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Vaajak.Application.Dto.Account;
 using Vaajak.Application.Dto.Primitives;
 using Vaajak.Application.Services.Account;
@@ -43,6 +44,7 @@ namespace VaajakApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet, Route("getAll")]
         public async Task<IActionResult> GetAllUsers([FromQuery] PaginationRequestDTO paginationRequestDTO)
         {
@@ -54,6 +56,46 @@ namespace VaajakApi.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "An error occurred while fetching users.", error = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpGet, Route("profile")]
+        public async Task<IActionResult> Profile()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrEmpty(userId))
+                    return Unauthorized("User id not exist on token");
+
+                var result = await _accountService.GetProfileAsync(userId);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto dto)
+        {
+            try
+            {
+                var result = await _accountService.RefreshTokenAsync(dto.RefreshToken);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
             }
         }
 

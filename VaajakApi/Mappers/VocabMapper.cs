@@ -10,10 +10,19 @@ namespace VaajakApi.Mappers
         {
             return new VocabsDto
             {
-                Id = Vocab.Id,
-                Vocabulary = Vocab.Vocabulary,
-                Type = Vocab.Type,
-                Voice = Vocab.Voice,
+                Id               = Vocab.Id,
+                Vocabulary       = Vocab.Vocabulary,
+                Type             = Vocab.Type,
+                Voice            = Vocab.Voice,
+                IpaPronunciation = Vocab.IpaPronunciation,
+                Meaning   = Vocab.Meaning,
+                Example1         = Vocab.Example1,
+                Example2         = Vocab.Example2,
+                Example3         = Vocab.Example3,
+                Synonyms         = Vocab.Synonyms,
+                Antonyms         = Vocab.Antonyms,
+                WordFamily       = Vocab.WordFamily,
+                ImageFile        = Vocab.ImageFile,
             };
         }
 

@@ -15,8 +15,11 @@ namespace Vaajak.Infrastructure.IdentityConfig
 
             var connectionString = configuration.GetConnectionString("SqlServer");
 
-            
-            services.AddDbContext<IdentityDatabaseContext>(options =>options.UseSqlServer(connectionString));
+            //sqlServer
+            //services.AddDbContext<IdentityDatabaseContext>(options =>options.UseSqlServer(connectionString));
+
+            //postgresSql
+            services.AddDbContext<IdentityDatabaseContext>(options => options.UseNpgsql(connectionString));
 
             var builder = services.AddIdentityCore<User>(options =>
             {
@@ -28,8 +31,8 @@ namespace Vaajak.Infrastructure.IdentityConfig
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
             })
-                .AddEntityFrameworkStores<IdentityDatabaseContext>()
                 .AddRoles<Role>()
+                .AddEntityFrameworkStores<IdentityDatabaseContext>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<PersianIdentityErrorDescriber>();
 

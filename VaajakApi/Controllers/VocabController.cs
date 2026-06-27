@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vaajak.Application.Dto.Primitives;
@@ -48,6 +49,7 @@ namespace VaajakApi.Controllers
             return Ok(vocab);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateVocab([FromBody] CreateVocabDto createVocabDto)
         {
@@ -70,6 +72,13 @@ namespace VaajakApi.Controllers
                 return NotFound();
             }
             return Ok(vocab);
+        }
+
+        [HttpPost("bulk-import")]
+        public async Task<IActionResult> BulkImport([FromBody] BulkImportVocabRequestDto request)
+        {
+            var result = await _vocabService.BulkImportAsync(request);
+            return Ok(result);
         }
 
         [HttpDelete]

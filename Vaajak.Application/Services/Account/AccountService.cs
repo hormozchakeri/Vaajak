@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Vaajak.Application.Dto.Account;
 using Vaajak.Application.Dto.Primitives;
+using Vaajak.Domain.Common.Auth;
 using Vaajak.Domain.Entities;
 using Vaajak.Domain.Repositories.Account;
 using X.PagedList;
@@ -11,9 +12,12 @@ namespace Vaajak.Application.Services.Account
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
-        public AccountService(IAccountRepository accountRepository)
+        private readonly IJwtTokenGenerator  _jwtTokenGenerator;
+
+        public AccountService(IAccountRepository accountRepository, IJwtTokenGenerator jwtTokenGenerator)
         {
             _accountRepository = accountRepository;
+            _jwtTokenGenerator  = jwtTokenGenerator;
         }
 
         public async Task<IPagedList<AccountDto>> GetAllUsersAsync(PaginationRequestDTO paginationRequestDTO)
@@ -46,16 +50,37 @@ namespace Vaajak.Application.Services.Account
         {
             var user = await _accountRepository.SigninAsync(signinDto.Username, signinDto.Password);
             if (user == null)
-            {
                 throw new Exception("کاربری با این مشخصات یافت نشد");
-            }
-            var token = await _accountRepository.GenerateJwtTokenAsync(user);
+
+            var accessToken  = await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
+            var refreshToken = await _jwtTokenGenerator.GenerateRefreshTokenAsync(user);
 
             return new SigninResponseDto
             {
-                Token = token,
-                Username = user.UserName,
-                Email = user.Email
+                Token        = accessToken,
+                RefreshToken = refreshToken,
+                Username     = user.UserName ?? string.Empty,
+                Email        = user.Email    ?? string.Empty,
+            };
+        }
+
+        public async Task<SigninResponseDto> RefreshTokenAsync(string refreshToken)
+        {
+            var userId = _jwtTokenGenerator.ValidateRefreshToken(refreshToken)
+                ?? throw new Exception("Invalid or expired refresh token.");
+
+            var user = await _accountRepository.FindByIdAsync(userId)
+                ?? throw new Exception("User not found.");
+
+            var newAccessToken  = await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
+            var newRefreshToken = await _jwtTokenGenerator.GenerateRefreshTokenAsync(user);
+
+            return new SigninResponseDto
+            {
+                Token        = newAccessToken,
+                RefreshToken = newRefreshToken,
+                Username     = user.UserName ?? string.Empty,
+                Email        = user.Email    ?? string.Empty,
             };
         }
 
@@ -88,5 +113,22 @@ namespace Vaajak.Application.Services.Account
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<ProfileDto> GetProfileAsync(string userId)
+        {
+            var user = await _accountRepository.FindByIdAsync(userId);
+
+            return user == null
+                ? throw new Exception("کاربر یافت نشد")
+                : new ProfileDto
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+        }
+
     }
 }

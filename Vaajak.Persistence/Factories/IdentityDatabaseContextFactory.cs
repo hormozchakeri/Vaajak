@@ -10,7 +10,7 @@ namespace Vaajak.Persistence.Factories
         public IdentityDatabaseContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<IdentityDatabaseContext>();
-            optionsBuilder.UseSqlServer(ConnectionStrings.IdentityDatabaseContext);
+            optionsBuilder.UseNpgsql(ConnectionStrings.IdentityDatabaseContext);
 
             return new IdentityDatabaseContext(optionsBuilder.Options);
         }

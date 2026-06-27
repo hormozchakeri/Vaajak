@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Vaajak.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class MyFirstMigrationForMain : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,8 @@ namespace Vaajak.Persistence.Migrations
                 name: "Packages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PackageName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PackageName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,10 +27,10 @@ namespace Vaajak.Persistence.Migrations
                 name: "Vocabs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Vocabulary = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Voice = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Vocabulary = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    Voice = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,8 +41,8 @@ namespace Vaajak.Persistence.Migrations
                 name: "PackageVocab",
                 columns: table => new
                 {
-                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VocabsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PackageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    VocabsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,10 +65,10 @@ namespace Vaajak.Persistence.Migrations
                 name: "Translates",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Vocabtran = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Usage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VocabId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Vocabtran = table.Column<string>(type: "text", nullable: false),
+                    Usage = table.Column<string>(type: "text", nullable: false),
+                    VocabId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,11 +85,11 @@ namespace Vaajak.Persistence.Migrations
                 name: "Examples",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Caseexample = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Exampletran = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Voice = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TranslateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Caseexample = table.Column<string>(type: "text", nullable: false),
+                    Exampletran = table.Column<string>(type: "text", nullable: false),
+                    Voice = table.Column<string>(type: "text", nullable: false),
+                    TranslateId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
