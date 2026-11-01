@@ -44,6 +44,25 @@ namespace VaajakApi.Controllers
             }
         }
 
+        [HttpPost, Route("google-login")]
+        public async Task<IActionResult> GoogleSignin(GoogleSigninDto googleSigninDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var result = await _accountService.GoogleSigninAsync(googleSigninDto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
+
         [Authorize]
         [HttpGet, Route("getAll")]
         public async Task<IActionResult> GetAllUsers([FromQuery] PaginationRequestDTO paginationRequestDTO)

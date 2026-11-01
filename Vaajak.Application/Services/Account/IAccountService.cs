@@ -10,6 +10,7 @@ namespace Vaajak.Application.Services.Account
         Task<IPagedList<AccountDto>> GetAllUsersAsync(PaginationRequestDTO paginationRequestDTO);
         Task<SignupDto> SignupAsync(SignupDto signupDto);
         Task<SigninResponseDto> SigninAsync(SigninDto signinDto);
+        Task<SigninResponseDto> GoogleSigninAsync(GoogleSigninDto googleSigninDto);
         Task<SigninResponseDto> RefreshTokenAsync(string refreshToken);
         Task<ProfileDto> GetProfileAsync(string userId);
     }
